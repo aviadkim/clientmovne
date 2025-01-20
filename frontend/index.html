@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>שאלון</title>
+</head>
+<body>
+    <div class="container">
+        <form id="questionnaire-form">
+            <!-- Section 1: Personal Details -->
+            <section>
+                <h2>פרטים אישיים</h2>
+                <div class="form-group">
+                    <label for="fullName">שם מלא</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="שם מלא" required>
+                </div>
+                <div class="form-group">
+                    <label for="idNumber">תעודת זהות</label>
+                    <input type="text" id="idNumber" name="idNumber" placeholder="תעודת זהות" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">אימייל</label>
+                    <input type="email" id="email" name="email" placeholder="אימייל" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">טלפון</label>
+                    <input type="tel" id="phone" name="phone" placeholder="טלפון" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthDate">תאריך לידה</label>
+                    <input type="date" id="birthDate" name="birthDate" required>
+                </div>
+            </section>
+
+            <!-- Section 2: Investment Details -->
+            <section>
+                <h2>פרטי השקעה</h2>
+                <div class="form-group">
+                    <label for="investmentAmount">סכום להשקעה</label>
+                    <input type="number" id="investmentAmount" name="investmentAmount" placeholder="סכום להשקעה" required>
+                </div>
+                <div class="form-group">
+                    <label for="investmentDuration">משך זמן להשקעה</label>
+                    <input type="text" id="investmentDuration" name="investmentDuration" placeholder="משך זמן" required>
+                </div>
+            </section>
+
+            <!-- Section 3: Risk Assessment -->
+            <section>
+                <h2>הערכת סיכונים</h2>
+                <div class="form-group">
+                    <label>רמת סיכון</label>
+                    <div>
+                        <input type="radio" id="low" name="riskLevel" value="low" required>
+                        <label for="low">נמוך</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="medium" name="riskLevel" value="medium">
+                        <label for="medium">בינוני</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="high" name="riskLevel" value="high">
+                        <label for="high">גבוה</label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Agreement -->
+            <section>
+                <h2>הצהרה וחתימה</h2>
+                <div class="form-group">
+                    <input type="checkbox" id="agreement1" required>
+                    <label for="agreement1">מבוא והצהרות</label>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="agreement2" required>
+                    <label for="agreement2">בלי נאות</label>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="agreement3" required>
+                    <label for="agreement3">הצהרת הלקוח</label>
+                </div>
+
+                <!-- Digital Signature -->
+                <div class="form-group">
+                    <label for="signature">חתימה דיגיטלית</label>
+                    <canvas id="signature" width="300" height="150" style="border:1px solid #000;"></canvas>
+                    <button type="button" id="clear-signature">נקה חתימה</button>
+                </div>
+            </section>
+
+            <button type="submit">שלח</button>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
