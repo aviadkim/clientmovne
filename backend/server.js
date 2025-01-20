@@ -7,20 +7,16 @@ const fs = require("fs");
 const app = express();
 app.use(bodyParser.json());
 
-// Email Configuration
-const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-        user: "info@movne.co.il",
-        pass: "YOUR_EMAIL_PASSWORD" // Replace this with your actual email password
-    }
+// Route for testing the server
+app.get("/", (req, res) => {
+    res.send("Backend server is running. Use the frontend to submit the form.");
 });
 
-// Handle form submission
+// Handle form submissions
 app.post("/submit", (req, res) => {
     const data = req.body;
 
-    // Generate PDF
+    // Create a PDF document
     const pdfDoc = new PDFDocument();
     const pdfPath = `submission-${Date.now()}.pdf`;
     const stream = pdfDoc.pipe(fs.createWriteStream(pdfPath));
@@ -34,26 +30,39 @@ app.post("/submit", (req, res) => {
     pdfDoc.text(`Investment Amount: ${data.investmentAmount}`);
     pdfDoc.text(`Investment Duration: ${data.investmentDuration}`);
     pdfDoc.text(`Risk Level: ${data.riskLevel}`);
-    pdfDoc.text(`Digital Signature included.`);
+    pdfDoc.text(`Digital Signature: Attached`);
     pdfDoc.end();
 
     stream.on("finish", async () => {
         try {
-            // Send Email with PDF
-            await transporter.sendMail({
-                from: "info@movne.co.il",
-                to: ["info@movne.co.il", data.email],
-                subject: "Questionnaire Submission",
-                text: "Attached is the filled questionnaire.",
-                attachments: [{ path: pdfPath }]
+            // Send an email with the PDF attachment
+            const transporter = nodemailer.createTransport({
+                service: "Gmail",
+                auth: {
+                    user: "info@movne.co.il", // Replace with your email
+                    pass: "YOUR_EMAIL_PASSWORD" // Replace with your email password
+                }
             });
 
-            fs.unlinkSync(pdfPath); // Cleanup file after sending
-            res.status(200).send("Submission successful!");
+            await transporter.sendMail({
+                from: "info@movne.co.il",
+                to: [data.email, "info@movne.co.il"],
+                subject: "Questionnaire Submission",
+                text: "Your questionnaire has been successfully submitted. See attached PDF.",
+                attachments: [{ filename: "submission.pdf", path: pdfPath }]
+            });
+
+            // Cleanup the file
+            fs.unlinkSync(pdfPath);
+
+            res.status(200).send("Form submitted successfully!");
         } catch (error) {
-            res.status(500).send("Failed to send email.");
+            console.error("Error sending email:", error);
+            res.status(500).send("Error submitting the form.");
         }
     });
 });
 
-app.listen(3000, () => console.log("Server running at http://localhost:3000"));
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
